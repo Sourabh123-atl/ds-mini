@@ -1,0 +1,11 @@
+pandas
+pyarrow
+numpy
+scikit-learn
+vaderSentiment
+plotly
+streamlit
+joblib
+playwright
+python-docx
+pillow

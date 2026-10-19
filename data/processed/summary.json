@@ -1,0 +1,276 @@
+{
+  "raw_rows": 179108,
+  "clean_rows": 178484,
+  "days": 25,
+  "date_min": "2020-07-25",
+  "date_max": "2020-08-30",
+  "india_rows": 20582,
+  "maha_rows": 3080,
+  "mumbai_rows": 2488,
+  "sentiment_share": {
+    "Positive": 0.3862,
+    "Neutral": 0.3467,
+    "Negative": 0.2671
+  },
+  "sentiment_share_india": {
+    "Positive": 0.4116,
+    "Neutral": 0.3797,
+    "Negative": 0.2087
+  },
+  "sentiment_share_mumbai": {
+    "Neutral": 0.4301,
+    "Positive": 0.3613,
+    "Negative": 0.2086
+  },
+  "mean_compound": 0.0603,
+  "mean_compound_india": 0.0992,
+  "mean_compound_mumbai": 0.0707,
+  "term_counts": {
+    "fever": 126,
+    "cough": 232,
+    "vaccine": 4086,
+    "oxygen": 112,
+    "lockdown": 3072,
+    "flu/influenza": 734,
+    "mask": 6265,
+    "hospital": 3100,
+    "test": 8893,
+    "death": 11873
+  },
+  "term_pct_india": {
+    "fever": 0.14,
+    "cough": 0.08,
+    "vaccine": 3.05,
+    "oxygen": 0.13,
+    "lockdown": 2.3,
+    "flu/influenza": 0.11,
+    "mask": 1.4,
+    "hospital": 4.21,
+    "test": 11.3,
+    "death": 10.64
+  },
+  "term_pct_rest": {
+    "fever": 0.06,
+    "cough": 0.14,
+    "vaccine": 2.19,
+    "oxygen": 0.05,
+    "lockdown": 1.65,
+    "flu/influenza": 0.45,
+    "mask": 3.79,
+    "hospital": 1.41,
+    "test": 4.16,
+    "death": 6.13
+  },
+  "top_hashtags": {
+    "covid19": 99825,
+    "coronavirus": 10149,
+    "pandemic": 1616,
+    "covid": 1296,
+    "india": 1193,
+    "corona": 1162,
+    "trump": 1083,
+    "lockdown": 963,
+    "coronaviruspandemic": 881,
+    "covid_19": 823,
+    "wearamask": 798,
+    "coronavirusupdate": 719,
+    "odisha": 707,
+    "vaccine": 703,
+    "china": 542,
+    "indiafightscorona": 538,
+    "coronavirusupdates": 521,
+    "staysafe": 496,
+    "usa": 482,
+    "breaking": 480
+  },
+  "top_hashtags_india": {
+    "covid19": 12888,
+    "coronavirus": 1138,
+    "india": 584,
+    "odisha": 484,
+    "blood": 300,
+    "indiafightscorona": 259,
+    "coronavirusupdates": 241,
+    "lockdown": 172,
+    "covid": 170,
+    "covid19india": 168,
+    "breaking": 162,
+    "rajasthan": 150,
+    "karnataka": 148,
+    "delhi": 140,
+    "maharashtra": 140
+  },
+  "topics": [
+    {
+      "topic": 0,
+      "top_terms": [
+        "cases",
+        "total",
+        "confirmed",
+        "active",
+        "update",
+        "reported",
+        "number",
+        "reports",
+        "august",
+        "recovered"
+      ],
+      "label": "T0: cases, total, confirmed"
+    },
+    {
+      "topic": 1,
+      "top_terms": [
+        "help",
+        "spread",
+        "daily",
+        "symptoms",
+        "risk",
+        "slow",
+        "reporting",
+        "self",
+        "identify",
+        "sooner"
+      ],
+      "label": "T1: help, spread, daily"
+    },
+    {
+      "topic": 2,
+      "top_terms": [
+        "health",
+        "vaccine",
+        "trump",
+        "world",
+        "news",
+        "know",
+        "need",
+        "time",
+        "good",
+        "virus"
+      ],
+      "label": "T2: health, vaccine, trump"
+    },
+    {
+      "topic": 3,
+      "top_terms": [
+        "india",
+        "day",
+        "spike",
+        "hours",
+        "tally",
+        "single",
+        "lakh",
+        "reported",
+        "highest",
+        "cases"
+      ],
+      "label": "T3: india, day, spike"
+    },
+    {
+      "topic": 4,
+      "top_terms": [
+        "deaths",
+        "reported",
+        "died",
+        "worldwide",
+        "watch",
+        "americans",
+        "total",
+        "recovered",
+        "abo",
+        "hours"
+      ],
+      "label": "T4: deaths, reported, died"
+    },
+    {
+      "topic": 5,
+      "top_terms": [
+        "positive",
+        "tested",
+        "tests",
+        "test",
+        "need",
+        "blood",
+        "samples",
+        "hospital",
+        "minister",
+        "negative"
+      ],
+      "label": "T5: positive, tested, tests"
+    },
+    {
+      "topic": 6,
+      "top_terms": [
+        "mask",
+        "wear",
+        "masks",
+        "wearing",
+        "face",
+        "wearamask",
+        "social",
+        "distancing",
+        "protect",
+        "safe"
+      ],
+      "label": "T6: mask, wear, masks"
+    },
+    {
+      "topic": 7,
+      "top_terms": [
+        "gmt",
+        "coronaviruspandemic",
+        "coronavirusupdate",
+        "cases",
+        "updated",
+        "death",
+        "united",
+        "states",
+        "deaths",
+        "case"
+      ],
+      "label": "T7: gmt, coronaviruspandemic, coronavirusupdate"
+    }
+  ],
+  "topic_share": {
+    "T2: health, vaccine, trump": 0.6907,
+    "T0: cases, total, confirmed": 0.0671,
+    "T6: mask, wear, masks": 0.0542,
+    "T3: india, day, spike": 0.0535,
+    "T5: positive, tested, tests": 0.0462,
+    "T1: help, spread, daily": 0.0436,
+    "T4: deaths, reported, died": 0.0276,
+    "T7: gmt, coronaviruspandemic, coronavirusupdate": 0.0088,
+    "Unassigned": 0.0083
+  },
+  "n_cases_rows": {
+    "case_time_series": 641,
+    "states": 21675,
+    "districts": 358633,
+    "owid_full_data": 1674
+  },
+  "best_lag": {
+    "india vs india_cases": {
+      "lag_days": 1,
+      "r": -0.318,
+      "r_lag0": -0.11,
+      "n": 25
+    },
+    "india_share_pct vs india_cases": {
+      "lag_days": 1,
+      "r": -0.258,
+      "r_lag0": -0.126,
+      "n": 25
+    },
+    "maha vs maha_cases": {
+      "lag_days": 1,
+      "r": -0.354,
+      "r_lag0": 0.027,
+      "n": 25
+    },
+    "mumbai vs mumbai_cases": {
+      "lag_days": -7,
+      "r": -0.422,
+      "r_lag0": -0.067,
+      "n": 25
+    }
+  }
+}

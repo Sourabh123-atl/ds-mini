@@ -1,0 +1,130 @@
+[
+  {
+    "topic": 0,
+    "top_terms": [
+      "cases",
+      "total",
+      "confirmed",
+      "active",
+      "update",
+      "reported",
+      "number",
+      "reports",
+      "august",
+      "recovered"
+    ],
+    "label": "T0: cases, total, confirmed"
+  },
+  {
+    "topic": 1,
+    "top_terms": [
+      "help",
+      "spread",
+      "daily",
+      "symptoms",
+      "risk",
+      "slow",
+      "reporting",
+      "self",
+      "identify",
+      "sooner"
+    ],
+    "label": "T1: help, spread, daily"
+  },
+  {
+    "topic": 2,
+    "top_terms": [
+      "health",
+      "vaccine",
+      "trump",
+      "world",
+      "news",
+      "know",
+      "need",
+      "time",
+      "good",
+      "virus"
+    ],
+    "label": "T2: health, vaccine, trump"
+  },
+  {
+    "topic": 3,
+    "top_terms": [
+      "india",
+      "day",
+      "spike",
+      "hours",
+      "tally",
+      "single",
+      "lakh",
+      "reported",
+      "highest",
+      "cases"
+    ],
+    "label": "T3: india, day, spike"
+  },
+  {
+    "topic": 4,
+    "top_terms": [
+      "deaths",
+      "reported",
+      "died",
+      "worldwide",
+      "watch",
+      "americans",
+      "total",
+      "recovered",
+      "abo",
+      "hours"
+    ],
+    "label": "T4: deaths, reported, died"
+  },
+  {
+    "topic": 5,
+    "top_terms": [
+      "positive",
+      "tested",
+      "tests",
+      "test",
+      "need",
+      "blood",
+      "samples",
+      "hospital",
+      "minister",
+      "negative"
+    ],
+    "label": "T5: positive, tested, tests"
+  },
+  {
+    "topic": 6,
+    "top_terms": [
+      "mask",
+      "wear",
+      "masks",
+      "wearing",
+      "face",
+      "wearamask",
+      "social",
+      "distancing",
+      "protect",
+      "safe"
+    ],
+    "label": "T6: mask, wear, masks"
+  },
+  {
+    "topic": 7,
+    "top_terms": [
+      "gmt",
+      "coronaviruspandemic",
+      "coronavirusupdate",
+      "cases",
+      "updated",
+      "death",
+      "united",
+      "states",
+      "deaths",
+      "case"
+    ],
+    "label": "T7: gmt, coronaviruspandemic, coronavirusupdate"
+  }
+]
