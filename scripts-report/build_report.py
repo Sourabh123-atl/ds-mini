@@ -257,9 +257,10 @@ tabs = st.tabs(["Trends", "Sentiment", "Topics", "Keywords & Hashtags",
         ("VADER (vaderSentiment)", "Rule-based sentiment scoring designed for social-media text."),
         ("scikit-learn", "TF-IDF, NMF topic modelling, logistic regression, metrics."),
         ("joblib", "Export of the trained sentiment pipeline (models/sentiment_tfidf_lr.joblib)."),
+        ("FastAPI & Uvicorn", "High-throughput asynchronous REST API backend serving live inference and OpenAPI docs."),
         ("Streamlit", "Interactive web dashboard with sidebar filters and tabs."),
         ("Plotly", "Interactive bar, line, area, pie, scatter and heat-map charts."),
-        ("Playwright (Chromium)", "Headless browser used to capture the dashboard screenshots."),
+        ("Selenium / Headless Chrome", "Automated browser engine used to capture dashboard screenshots."),
         ("Kaggle / GitHub / Hugging Face", "Sources of the tweet datasets."),
         ("covid19india.org archive, Our World in Data", "Official COVID-19 case time series."),
     ]:
@@ -305,7 +306,9 @@ tabs = st.tabs(["Trends", "Sentiment", "Topics", "Keywords & Hashtags",
         ("03-topics.png", "Fig. 5: Topics tab \u2013 NMF topic share by week and top terms per topic"),
         ("04-keywords.png", "Fig. 6: Keywords & Hashtags tab \u2013 top hashtags, health-term mentions, terms over time, India vs rest of world"),
         ("05-cases-correlation.png", "Fig. 7: Cases correlation tab \u2013 lag correlation (\u22127 to +7 days), scatter of India tweets vs cases, case context"),
-        ("06-try-the-model.png", "Fig. 8: Try the model tab \u2013 live prediction (Negative, 56.9%) and confusion matrix on the test split"),
+        ("06-try-the-model.png", "Fig. 8: Live Model & Explainable AI (XAI) tab \u2013 prediction, token-level feature attribution, and evaluation matrix"),
+        ("07-anomalies.png", "Fig. 9: Outbreak Anomaly Signals \u2013 rolling Z-score surveillance (+1.5\u03c3 threshold) detecting unusual surges in chatter"),
+        ("08-flux-web.png", "Fig. 10: FLUX Clinical Web Command Center & Research Portal (FastAPI backend + Single-Page Application)"),
     ]:
         figure(doc, f, c)
     sub(doc, "4.4 Limitations and caveats")
