@@ -45,6 +45,12 @@ docker run -p 8501:8501 covid-trends-app
 ```
 Access the application at `http://localhost:8501`.
 
+### Option 4: Vercel (FastAPI Backend & FLUX Web Command Center)
+The repository is configured with `pyproject.toml` and `main.py` for zero-config Vercel deployment:
+1. Connect this repo to [Vercel](https://vercel.com/new).
+2. Framework Preset will automatically detect **FastAPI** (`[tool.vercel] entrypoint = "api:app"`).
+3. Click **"Deploy"** to get an instant HTTPS serverless endpoint serving both the Web Command Center and FastAPI REST API.
+
 ---
 
 ## 🌟 Advanced Platform Capabilities

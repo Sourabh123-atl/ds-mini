@@ -76,7 +76,7 @@ def load_all_resources():
     if model_path.exists():
         try:
             model_pipeline = joblib.load(model_path)
-            print("✓ Loaded supervised TF-IDF + Logistic Regression model")
+            print("[OK] Loaded supervised TF-IDF + Logistic Regression model")
         except Exception as e:
             print(f"Warning: Failed to load ML model: {e}")
             
@@ -86,7 +86,7 @@ def load_all_resources():
     # 3. Processed Datasets
     summ_path = PROCESSED_DIR / "summary.json"
     if summ_path.exists():
-        summary_data = json.loads(summ_path.read_text())
+        summary_data = json.loads(summ_path.read_text(encoding="utf-8"))
         
     daily_path = PROCESSED_DIR / "daily.csv"
     if daily_path.exists():
@@ -102,13 +102,13 @@ def load_all_resources():
         
     metrics_path = MODELS_DIR / "metrics.json"
     if metrics_path.exists():
-        metrics_data = json.loads(metrics_path.read_text())
+        metrics_data = json.loads(metrics_path.read_text(encoding="utf-8"))
         
     tweets_path = PROCESSED_DIR / "tweets.parquet"
     if tweets_path.exists():
         try:
             tweets_df = pd.read_parquet(tweets_path)
-            print(f"✓ Loaded {len(tweets_df):,} surveillance tweets into memory")
+            print(f"[OK] Loaded {len(tweets_df):,} surveillance tweets into memory")
         except Exception as e:
             print(f"Warning: Could not load tweets.parquet: {e}")
 
@@ -698,5 +698,5 @@ app.mount("/", StaticFiles(directory=str(PUBLIC_DIR), html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    print("🚀 FLUX Command Center running at http://localhost:8000")
+    print("[*] FLUX Command Center running at http://localhost:8000")
     uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
