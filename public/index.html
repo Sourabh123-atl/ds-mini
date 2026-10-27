@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLUX — AI-Powered Infectious Disease Intelligence Command Center</title>
+  <meta name="description" content="Advanced epidemiological surveillance platform analyzing COVID-19 and influenza trends using social media signals, NLP, Explainable AI, and geospatial intelligence.">
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body>
+
+  <!-- ================= Top Navigation Bar ================= -->
+  <header class="navbar">
+    <div class="brand-container" onclick="navigate('landing')">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div>
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <span class="brand-title">FLUX</span>
+          <span class="brand-badge">BIO-INTEL v3.0</span>
+        </div>
+      </div>
+    </div>
+
+    <ul class="nav-links">
+      <li><a class="nav-item active" onclick="navigate('landing')" id="nav-landing">Overview</a></li>
+      <li><a class="nav-item" onclick="navigate('dashboard')" id="nav-dashboard">Dashboard</a></li>
+      <li><a class="nav-item" onclick="navigate('explore')" id="nav-explore">Explorer</a></li>
+      <li><a class="nav-item" onclick="navigate('nlp-lab')" id="nav-nlp-lab">NLP & XAI Lab</a></li>
+      <li><a class="nav-item" onclick="navigate('trends')" id="nav-trends">Forecasting</a></li>
+      <li><a class="nav-item" onclick="navigate('map')" id="nav-map">Geospatial</a></li>
+      <li><a class="nav-item" onclick="navigate('signals')" id="nav-signals">Outbreak Signals</a></li>
+      <li><a class="nav-item" onclick="navigate('research')" id="nav-research">Research Space</a></li>
+      <li><a class="nav-item" onclick="navigate('reports')" id="nav-reports">Reports</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="live-pill">
+        <span class="pulse-dot"></span>
+        <span>STREAM ACTIVE</span>
+      </div>
+      <a href="/docs" target="_blank" class="btn-ghost" title="Interactive Swagger REST API Documentation">
+        <span>API Docs</span>
+      </a>
+      <a href="http://localhost:8501" target="_blank" class="btn-ghost" title="Streamlit Analytics Workspace">
+        <span>Streamlit UI</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= Global Filter Strip ================= -->
+  <section class="filter-strip" id="globalFilterStrip">
+    <div class="filter-group">
+      <span class="filter-label">Disease Scope:</span>
+      <select class="filter-select" id="filterDisease" onchange="handleFilterChange()">
+        <option value="all">COVID-19 & Influenza (All)</option>
+        <option value="covid">COVID-19 Dominant</option>
+        <option value="influenza">Influenza Specific Mentions</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Geographic Region:</span>
+      <select class="filter-select" id="filterRegion" onchange="handleFilterChange()">
+        <option value="Global">Global Surveillance (178k posts)</option>
+        <option value="India">India National (20.5k posts)</option>
+        <option value="Maharashtra">Maharashtra State (3.1k posts)</option>
+        <option value="Mumbai">Mumbai Metropolitan (2.5k posts)</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Temporal Window:</span>
+      <select class="filter-select" id="filterTime">
+        <option value="all">25 Jul 2020 – 30 Aug 2020 (Full Baseline)</option>
+        <option value="w1">Aug Week 1 (India Surge)</option>
+        <option value="w2">Aug Week 2 (Mumbai Bed Strain)</option>
+        <option value="w3">Aug Week 3 (Vaccine Trial Focus)</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <input type="text" class="filter-input" id="filterSearch" placeholder="Filter symptom or #hashtag..." oninput="handleSearchInput(event)">
+    </div>
+  </section>
+
+  <!-- ================= App Main Content ================= -->
+  <main class="app-container">
+
+    <!-- ----------------- VIEW 1: LANDING / OVERVIEW ----------------- -->
+    <section class="view-panel active" id="view-landing">
+      <div class="hero-section">
+        <div class="hero-pill">
+          <span>🔬 Public Health Informatics · NLP Surveillance · Real-Time Intelligence</span>
+        </div>
+        <h1 class="hero-title">
+          Infectious Disease Intelligence<br>From <span>Global Social Chatter</span>
+        </h1>
+        <p class="hero-subtitle">
+          FLUX ingests, structures, and correlates real-world social media discussions with official epidemiological indicators.
+          Analyze clinical symptom trajectories, detect statistical volume anomalies, and evaluate early-warning signals across India, Maharashtra, and Mumbai.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="navigate('dashboard')">
+            <span>Launch Command Center</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <button class="btn-secondary" onclick="navigate('nlp-lab')">
+            <span>Explore NLP & XAI Lab</span>
+          </button>
+          <button class="btn-secondary" onclick="navigate('map')">
+            <span>Geospatial Radar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live KPI Cards -->
+      <div class="kpi-grid" id="landingKpiGrid">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Analyzed Posts</span><span class="kpi-icon">📊</span></div>
+          <div class="kpi-value" id="kpi-total">178,484</div>
+          <div class="kpi-footer"><span class="kpi-badge-positive">✓ Cleaned</span> deduplicated text</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Model Accuracy</span><span class="kpi-icon">🧠</span></div>
+          <div class="kpi-value" id="kpi-acc">78.2%</div>
+          <div class="kpi-footer"><span class="kpi-badge-positive">0.759</span> macro F1-score</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Clinical Symptoms</span><span class="kpi-icon">🩺</span></div>
+          <div class="kpi-value" id="kpi-symptoms">10</div>
+          <div class="kpi-footer">fever, oxygen, cough, hospital...</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Outbreak Signals</span><span class="kpi-icon">🚨</span></div>
+          <div class="kpi-value" id="kpi-anomalies" style="color:var(--rose-alert);">2</div>
+          <div class="kpi-footer"><span class="kpi-badge-negative">Elevated</span> Z-score flags</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Next 7D Projected Vol</span><span class="kpi-icon">🔮</span></div>
+          <div class="kpi-value" id="kpi-forecast">52,800</div>
+          <div class="kpi-footer">Auto-regressive trendline</div>
+        </div>
+      </div>
+
+      <!-- Architecture Pillars -->
+      <div class="grid-3" style="margin-top:2rem;">
+        <div class="card">
+          <div class="card-title"><span>🛡️ Surveillance vs Clinical Reality</span></div>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
+            FLUX strictly delineates social media discourse volume from laboratory-confirmed clinical infections.
+            It identifies public anxiety, hospital bed distress, and clinical queries without asserting medical causation.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>🔍 Explainable AI & NLP</span></div>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
+            Every sentiment classification includes token-level feature attribution showing exactly which linguistic tokens (e.g. <em>shortage</em>, <em>severe</em>, <em>efficacy</em>) drove the prediction.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>🗺️ Spatio-Temporal Tracking</span></div>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
+            Location taxonomy mapping regional Indian jurisdictions (Mumbai, Maharashtra, Delhi, Bengaluru) aligned with OWID global indicators and district case registries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 2: MAIN DASHBOARD ----------------- -->
+    <section class="view-panel" id="view-dashboard">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div>
+          <h2 style="font-size:1.6rem; font-weight:800;">Main Surveillance Command Center</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Continuous multi-signal correlation across social text, clinical symptoms, and confirmed epidemic curves.</p>
+        </div>
+        <button class="btn-primary" onclick="refreshDashboardData()"><span>Sync Live Feeds</span></button>
+      </div>
+
+      <!-- KPI Ribbon -->
+      <div class="kpi-grid" id="dashKpis">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Selected Tweets</span><span>💬</span></div>
+          <div class="kpi-value" id="dash-tweets">-</div>
+          <div class="kpi-footer" id="dash-region-label">Region: Global</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Sentiment Ratio</span><span>⚖️</span></div>
+          <div class="kpi-value" id="dash-sent-ratio" style="font-size:1.4rem;">-</div>
+          <div class="kpi-footer">Pos / Neu / Neg (%)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Leading Clinical Term</span><span>🏥</span></div>
+          <div class="kpi-value" id="dash-top-symptom" style="font-size:1.4rem; color:var(--cyan-bright);">-</div>
+          <div class="kpi-footer" id="dash-symptom-rate">-</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-title">Peak Lead/Lag Offset</span><span>⏱️</span></div>
+          <div class="kpi-value" id="dash-optimal-lag">+1 Day</div>
+          <div class="kpi-footer">r = -0.318 (India Cases)</div>
+        </div>
+      </div>
+
+      <!-- Epidemic Curve & Volume Chart -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span>📈 Epidemic Curve: Daily Social Chatter vs Confirmed Infections</span></div>
+          <span class="card-caption">Dual-axis tracking (Blue: Social Posts, Red: Official Daily Cases)</span>
+        </div>
+        <div class="chart-box" id="dailyTrendChartBox">
+          <canvas id="dailyTrendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 2-Column Split: Clinical Symptoms & Sentiment Composition -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>🩺 Clinical Symptom Mention Frequency</span></div>
+            <span class="card-caption">% of total posts mentioning clinical keywords</span>
+          </div>
+          <div class="chart-box" style="height:320px;">
+            <canvas id="symptomsChart"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>😊 Sentiment Polarity Distribution</span></div>
+            <span class="card-caption">Supervised TF-IDF Model vs Rule-based VADER</span>
+          </div>
+          <div class="chart-box" style="height:320px;">
+            <canvas id="sentimentDoughnutChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 3: EXPLORER & INGESTION ----------------- -->
+    <section class="view-panel" id="view-explore">
+      <div class="card-header" style="margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800;">Dataset Explorer & Ingestion Pipeline</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Explore, filter, and inspect cleaned social media and clinical surveillance records.</p>
+        </div>
+        <button class="btn-primary" onclick="downloadSampleCSV()"><span>Export Filtered CSV</span></button>
+      </div>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title" style="margin-bottom:0.75rem;"><span>📥 Schema Column Mapper</span></div>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; font-size:0.82rem;">
+          <div class="filter-group"><span class="filter-label">Text Column:</span> <span class="badge-neutral">text</span></div>
+          <div class="filter-group"><span class="filter-label">Date:</span> <span class="badge-neutral">date (ISO8601)</span></div>
+          <div class="filter-group"><span class="filter-label">Location:</span> <span class="badge-neutral">user_location</span></div>
+          <div class="filter-group"><span class="filter-label">Sentiment:</span> <span class="badge-neutral">model_sentiment</span></div>
+          <div class="filter-group"><span class="filter-label">Topic:</span> <span class="badge-neutral">topic_label</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="flux-table" id="exploreTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Region</th>
+                <th>Location</th>
+                <th>Sentiment</th>
+                <th>VADER Compound</th>
+                <th>Topic Category</th>
+                <th>Tweet Text</th>
+              </tr>
+            </thead>
+            <tbody id="exploreTableBody">
+              <tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading surveillance records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 4: NLP LAB & XAI ----------------- -->
+    <section class="view-panel" id="view-nlp-lab">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-size:1.5rem; font-weight:800;">NLP Laboratory & Explainable AI (XAI) Attribution</h2>
+        <p style="color:var(--text-dim); font-size:0.85rem;">Test custom text, observe dual-model predictions, and inspect token-level feature weights.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:0.75rem;"><span>💬 Input Text Playground</span></div>
+          
+          <div style="margin-bottom:0.75rem;">
+            <span class="quick-pill" onclick="setNlpSample('Hospitals in Mumbai are facing severe shortage of oxygen cylinders')">Oxygen Crisis</span>
+            <span class="quick-pill" onclick="setNlpSample('Great news! Phase 3 vaccine trial shows 95% efficacy against coronavirus')">Vaccine Efficacy</span>
+            <span class="quick-pill" onclick="setNlpSample('New COVID-19 safety guidelines and travel advisory released today')">Travel Advisory</span>
+            <span class="quick-pill" onclick="setNlpSample('Suffering from mild fever and sore throat after taking the booster shot')">Mild Symptoms</span>
+          </div>
+
+          <textarea class="nlp-input-box" id="nlpInputText">Hospitals in Mumbai are facing severe shortage of oxygen cylinders, doctors are exhausted</textarea>
+          
+          <button class="btn-primary" onclick="runNlpInference()" style="width:100%;"><span>Run Live Prediction & XAI Attribution</span></button>
+
+          <div style="margin-top:1.5rem; padding:1.2rem; background:rgba(15,23,42,0.6); border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span style="font-size:0.78rem; color:var(--text-dim); text-transform:uppercase;">ML Model Prediction:</span>
+                <div style="font-size:1.4rem; font-weight:800;" id="nlpPredLabel">Negative</div>
+              </div>
+              <div style="text-align:right;">
+                <span style="font-size:0.78rem; color:var(--text-dim); text-transform:uppercase;">Confidence:</span>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--cyan-bright);" id="nlpPredConf">81.4%</div>
+              </div>
+            </div>
+            <div style="margin-top:0.75rem; font-size:0.82rem; color:var(--text-muted);" id="nlpVaderVerdict">
+              VADER Compound: -0.557 (Negative) · Consensus: Agreed
+            </div>
+          </div>
+        </div>
+
+        <!-- XAI Token Attribution Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>🔍 Explainable AI: Token Feature Weights</span></div>
+            <span class="card-caption">Linguistic tokens driving this classification</span>
+          </div>
+          <p style="font-size:0.8rem; color:var(--text-dim);">Green bars indicate words pushing toward this sentiment; red bars oppose it.</p>
+          
+          <div class="xai-bar-container" id="xaiBarsContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Model Performance & Confusion Matrix -->
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-header">
+          <div class="card-title"><span>🎯 Benchmark Test Split Metrics (44,955 Labeled Tweets)</span></div>
+        </div>
+        <div class="grid-3">
+          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
+            <div style="font-size:0.78rem; color:var(--text-dim);">ACCURACY</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#fff;">78.20%</div>
+            <div style="font-size:0.75rem; color:var(--emerald-success);">Official Benchmark Split</div>
+          </div>
+          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
+            <div style="font-size:0.78rem; color:var(--text-dim);">MACRO F1-SCORE</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#fff;">0.7586</div>
+            <div style="font-size:0.75rem; color:var(--cyan-bright);">Balanced multi-class</div>
+          </div>
+          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
+            <div style="font-size:0.78rem; color:var(--text-dim);">VADER LEXICON ACCURACY</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#fff;">93.50%</div>
+            <div style="font-size:0.75rem; color:var(--indigo-accent);">Agreement with human labels</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 5: TRENDS & FORECASTING ----------------- -->
+    <section class="view-panel" id="view-trends">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800;">Time-Series Trend Detection & Forecasting</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Autoregressive trend estimation with 95% confidence intervals and holdout validation.</p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-ghost" onclick="setForecastHorizon(7)">7 Days</button>
+          <button class="btn-ghost" onclick="setForecastHorizon(14)">14 Days</button>
+          <button class="btn-ghost" onclick="setForecastHorizon(30)">30 Days</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span>🔮 Observed Volume & Projected Forecast Curve</span></div>
+          <span class="card-caption" id="forecastMetricsBadge">MAE: 142.1 · RMSE: 184.6</span>
+        </div>
+        <div class="chart-box" style="height:420px;">
+          <canvas id="forecastChart"></canvas>
+        </div>
+        <div style="margin-top:1rem; font-size:0.78rem; color:var(--text-dim);">
+          ⚠️ <em>Scientific Notice:</em> Forecasted trajectories represent projected social media conversation volume and public anxiety indices, not clinical lab-confirmed infection rates.
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 6: GEOSPATIAL INTELLIGENCE ----------------- -->
+    <section class="view-panel" id="view-map">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-size:1.5rem; font-weight:800;">Geospatial Epidemiological Radar</h2>
+        <p style="color:var(--text-dim); font-size:0.85rem;">Interactive geographic nodes displaying discussion density, leading symptom signals, and local case statistics.</p>
+      </div>
+
+      <div class="card" style="padding:1rem;">
+        <div id="mapContainer"></div>
+      </div>
+
+      <div class="grid-3" id="geoHubsGrid" style="margin-top:1.5rem;">
+        <!-- Dynamically populated hub cards -->
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 7: OUTBREAK SIGNALS MONITOR ----------------- -->
+    <section class="view-panel" id="view-signals">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800;">Outbreak Signal Monitor & Anomaly Radar</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Automated Z-score surveillance flagging statistically unusual chatter surges.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.8rem;">
+          <span class="filter-label">Sensitivity Threshold:</span>
+          <select class="filter-select" id="signalThresholdSelect" onchange="loadAnomalySignals()">
+            <option value="1.5">1.5σ (Broad Watch)</option>
+            <option value="2.0" selected>2.0σ (Elevated Surge)</option>
+            <option value="2.5">2.5σ (Critical Outbreak Alert)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="flux-table">
+            <thead>
+              <tr>
+                <th>Signal ID</th>
+                <th>Timestamp</th>
+                <th>Geographic Level</th>
+                <th>Observed Signal</th>
+                <th>Expected Baseline</th>
+                <th>Deviation</th>
+                <th>Severity Classification</th>
+                <th>Recommended Action</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="signalsTableBody">
+              <!-- Populated via API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 8: RESEARCH WORKSPACE ----------------- -->
+    <section class="view-panel" id="view-research">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800;">Research Projects & Clinical Comparison</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Create persistent research workspaces, record epidemiological notes, and compare diseases.</p>
+        </div>
+        <button class="btn-primary" onclick="createNewProject()"><span>+ New Research Project</span></button>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:1rem;"><span>📁 Active Research Projects</span></div>
+          <div id="projectListContainer" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <!-- Populated via localStorage -->
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:1rem;"><span>📝 Analyst Field Notes & Observations</span></div>
+          <textarea class="nlp-input-box" id="analystNotesText" style="height:180px;" placeholder="Record hypotheses, observed clinical shifts, data caveats..."></textarea>
+          <button class="btn-primary" onclick="saveAnalystNotes()"><span>Save Notes to Workspace</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- VIEW 9: AUTOMATED REPORTS ----------------- -->
+    <section class="view-panel" id="view-reports">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800;">Automated Research Intelligence Briefing</h2>
+          <p style="color:var(--text-dim); font-size:0.85rem;">Compile publication-ready executive briefings with quantitative indicators and provenance statements.</p>
+        </div>
+        <button class="btn-primary" onclick="compileExecutiveReport()"><span>Compile New Report</span></button>
+      </div>
+
+      <div class="card">
+        <div id="reportPreviewContainer" style="font-family:inherit; line-height:1.7;">
+          <p style="color:var(--text-dim);">Click 'Compile New Report' to generate a structured briefing from active surveillance data.</p>
+        </div>
+        <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+          <button class="btn-primary" id="btnDownloadReport" style="display:none;" onclick="downloadCompiledReport()"><span>Download Markdown Report (.md)</span></button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Main Application Script -->
+  <script src="app.js"></script>
+
+</body>
+</html>
