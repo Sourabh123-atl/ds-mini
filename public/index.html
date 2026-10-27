@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FLUX — AI-Powered Infectious Disease Intelligence Command Center</title>
-  <meta name="description" content="Advanced epidemiological surveillance platform analyzing COVID-19 and influenza trends using social media signals, NLP, Explainable AI, and geospatial intelligence.">
+  <title>FLUX — COVID-19 & Influenza Epidemiological Surveillance Platform</title>
+  <meta name="description" content="Academic public health informatics platform analyzing COVID-19 and influenza trends using social media signals, NLP, Explainable AI, and geospatial intelligence.">
   <link rel="stylesheet" href="styles.css">
   
   <!-- Leaflet CSS -->
@@ -12,18 +12,18 @@
 </head>
 <body>
 
-  <!-- ================= Top Navigation Bar ================= -->
+  <!-- ================= Clean Academic Navbar ================= -->
   <header class="navbar">
     <div class="brand-container" onclick="navigate('landing')">
       <div class="brand-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
         </svg>
       </div>
       <div>
-        <div style="display:flex; align-items:center; gap:0.4rem;">
+        <div style="display:flex; align-items:center;">
           <span class="brand-title">FLUX</span>
-          <span class="brand-badge">BIO-INTEL v3.0</span>
+          <span class="brand-badge">Epidemiological Intelligence</span>
         </div>
       </div>
     </div>
@@ -31,88 +31,87 @@
     <ul class="nav-links">
       <li><a class="nav-item active" onclick="navigate('landing')" id="nav-landing">Overview</a></li>
       <li><a class="nav-item" onclick="navigate('dashboard')" id="nav-dashboard">Dashboard</a></li>
-      <li><a class="nav-item" onclick="navigate('explore')" id="nav-explore">Explorer</a></li>
-      <li><a class="nav-item" onclick="navigate('nlp-lab')" id="nav-nlp-lab">NLP & XAI Lab</a></li>
+      <li><a class="nav-item" onclick="navigate('explore')" id="nav-explore">Explorer & Ingest</a></li>
+      <li><a class="nav-item" onclick="navigate('nlp-lab')" id="nav-nlp-lab">NLP & Explainable AI</a></li>
       <li><a class="nav-item" onclick="navigate('trends')" id="nav-trends">Forecasting</a></li>
       <li><a class="nav-item" onclick="navigate('map')" id="nav-map">Geospatial</a></li>
       <li><a class="nav-item" onclick="navigate('signals')" id="nav-signals">Outbreak Signals</a></li>
       <li><a class="nav-item" onclick="navigate('research')" id="nav-research">Research Space</a></li>
-      <li><a class="nav-item" onclick="navigate('reports')" id="nav-reports">Reports</a></li>
+      <li><a class="nav-item" onclick="navigate('reports')" id="nav-reports">Briefings</a></li>
     </ul>
 
     <div class="nav-actions">
-      <div class="live-pill">
-        <span class="pulse-dot"></span>
-        <span>STREAM ACTIVE</span>
-      </div>
+      <!-- Light / Dark Theme Switcher Button -->
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Light / Dark Mode">
+        <span id="themeIcon">🌙</span>
+      </button>
       <a href="/docs" target="_blank" class="btn-ghost" title="Interactive Swagger REST API Documentation">
         <span>API Docs</span>
       </a>
       <a href="http://localhost:8501" target="_blank" class="btn-ghost" title="Streamlit Analytics Workspace">
-        <span>Streamlit UI</span>
+        <span>Streamlit</span>
       </a>
     </div>
   </header>
 
-  <!-- ================= Global Filter Strip ================= -->
+  <!-- ================= Clean Global Filter Strip ================= -->
   <section class="filter-strip" id="globalFilterStrip">
     <div class="filter-group">
-      <span class="filter-label">Disease Scope:</span>
+      <span class="filter-label">Disease Target:</span>
       <select class="filter-select" id="filterDisease" onchange="handleFilterChange()">
         <option value="all">COVID-19 & Influenza (All)</option>
-        <option value="covid">COVID-19 Dominant</option>
-        <option value="influenza">Influenza Specific Mentions</option>
+        <option value="covid">COVID-19 Discourse</option>
+        <option value="influenza">Influenza / Flu Mentions</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <span class="filter-label">Geographic Region:</span>
+      <span class="filter-label">Surveillance Region:</span>
       <select class="filter-select" id="filterRegion" onchange="handleFilterChange()">
-        <option value="Global">Global Surveillance (178k posts)</option>
-        <option value="India">India National (20.5k posts)</option>
-        <option value="Maharashtra">Maharashtra State (3.1k posts)</option>
-        <option value="Mumbai">Mumbai Metropolitan (2.5k posts)</option>
+        <option value="Global">Global Surveillance (178,484 posts)</option>
+        <option value="India">India National (20,582 posts)</option>
+        <option value="Maharashtra">Maharashtra State (3,080 posts)</option>
+        <option value="Mumbai">Mumbai Metropolitan (2,488 posts)</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <span class="filter-label">Temporal Window:</span>
+      <span class="filter-label">Date Window:</span>
       <select class="filter-select" id="filterTime">
-        <option value="all">25 Jul 2020 – 30 Aug 2020 (Full Baseline)</option>
-        <option value="w1">Aug Week 1 (India Surge)</option>
-        <option value="w2">Aug Week 2 (Mumbai Bed Strain)</option>
-        <option value="w3">Aug Week 3 (Vaccine Trial Focus)</option>
+        <option value="all">25 Jul 2020 – 30 Aug 2020 (Baseline)</option>
+        <option value="w1">Week 1 Focus (India Surge)</option>
+        <option value="w2">Week 2 Focus (Mumbai Hospital Strain)</option>
+        <option value="w3">Week 3 Focus (Vaccine Efficacy Reactions)</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <input type="text" class="filter-input" id="filterSearch" placeholder="Filter symptom or #hashtag..." oninput="handleSearchInput(event)">
+      <input type="text" class="filter-input" id="filterSearch" placeholder="Search symptom or hashtag..." oninput="handleSearchInput(event)">
     </div>
   </section>
 
-  <!-- ================= App Main Content ================= -->
+  <!-- ================= App Main Container ================= -->
   <main class="app-container">
 
     <!-- ----------------- VIEW 1: LANDING / OVERVIEW ----------------- -->
     <section class="view-panel active" id="view-landing">
       <div class="hero-section">
         <div class="hero-pill">
-          <span>🔬 Public Health Informatics · NLP Surveillance · Real-Time Intelligence</span>
+          <span>Public Health Informatics · NLP Surveillance · Real-Time Epidemiology</span>
         </div>
         <h1 class="hero-title">
-          Infectious Disease Intelligence<br>From <span>Global Social Chatter</span>
+          Infectious Disease Intelligence<br>From <span>Social Media Signals</span>
         </h1>
         <p class="hero-subtitle">
-          FLUX ingests, structures, and correlates real-world social media discussions with official epidemiological indicators.
-          Analyze clinical symptom trajectories, detect statistical volume anomalies, and evaluate early-warning signals across India, Maharashtra, and Mumbai.
+          An academic public health analytics platform correlating online social discourse with official epidemiological case counts in India, Maharashtra, and Mumbai. Track symptom shifts, discover emerging topics, and evaluate early-warning signals.
         </p>
         <div class="hero-actions">
           <button class="btn-primary" onclick="navigate('dashboard')">
-            <span>Launch Command Center</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <span>Explore Dashboard</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
           <button class="btn-secondary" onclick="navigate('nlp-lab')">
-            <span>Explore NLP & XAI Lab</span>
+            <span>NLP & Explainable AI Lab</span>
           </button>
           <button class="btn-secondary" onclick="navigate('map')">
             <span>Geospatial Radar</span>
@@ -120,54 +119,53 @@
         </div>
       </div>
 
-      <!-- Live KPI Cards -->
-      <div class="kpi-grid" id="landingKpiGrid">
+      <!-- Clean KPI Metric Cards -->
+      <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Analyzed Posts</span><span class="kpi-icon">📊</span></div>
+          <div class="kpi-header"><span class="kpi-title">Cleaned Posts</span><span>📊</span></div>
           <div class="kpi-value" id="kpi-total">178,484</div>
           <div class="kpi-footer"><span class="kpi-badge-positive">✓ Cleaned</span> deduplicated text</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Model Accuracy</span><span class="kpi-icon">🧠</span></div>
+          <div class="kpi-header"><span class="kpi-title">Model Accuracy</span><span>🧠</span></div>
           <div class="kpi-value" id="kpi-acc">78.2%</div>
           <div class="kpi-footer"><span class="kpi-badge-positive">0.759</span> macro F1-score</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Clinical Symptoms</span><span class="kpi-icon">🩺</span></div>
+          <div class="kpi-header"><span class="kpi-title">Clinical Symptoms</span><span>🩺</span></div>
           <div class="kpi-value" id="kpi-symptoms">10</div>
           <div class="kpi-footer">fever, oxygen, cough, hospital...</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Outbreak Signals</span><span class="kpi-icon">🚨</span></div>
+          <div class="kpi-header"><span class="kpi-title">Outbreak Signals</span><span>🚨</span></div>
           <div class="kpi-value" id="kpi-anomalies" style="color:var(--rose-alert);">2</div>
           <div class="kpi-footer"><span class="kpi-badge-negative">Elevated</span> Z-score flags</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Next 7D Projected Vol</span><span class="kpi-icon">🔮</span></div>
+          <div class="kpi-header"><span class="kpi-title">Next 7D Projected Vol</span><span>🔮</span></div>
           <div class="kpi-value" id="kpi-forecast">52,800</div>
-          <div class="kpi-footer">Auto-regressive trendline</div>
+          <div class="kpi-footer">Autoregressive estimate</div>
         </div>
       </div>
 
-      <!-- Architecture Pillars -->
-      <div class="grid-3" style="margin-top:2rem;">
+      <!-- Core Pillars -->
+      <div class="grid-3" style="margin-top:1.5rem;">
         <div class="card">
-          <div class="card-title"><span>🛡️ Surveillance vs Clinical Reality</span></div>
-          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
-            FLUX strictly delineates social media discourse volume from laboratory-confirmed clinical infections.
-            It identifies public anxiety, hospital bed distress, and clinical queries without asserting medical causation.
+          <div class="card-title"><span>🛡️ Surveillance vs Clinical Diagnosis</span></div>
+          <p style="font-size:0.86rem; color:var(--text-muted); margin-top:0.6rem;">
+            FLUX measures online discussion volume, hospital strain queries, and public sentiment. It clearly separates social chatter from clinical diagnosis and does not assert medical causation.
           </p>
         </div>
         <div class="card">
-          <div class="card-title"><span>🔍 Explainable AI & NLP</span></div>
-          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
-            Every sentiment classification includes token-level feature attribution showing exactly which linguistic tokens (e.g. <em>shortage</em>, <em>severe</em>, <em>efficacy</em>) drove the prediction.
+          <div class="card-title"><span>🔍 Explainable AI (XAI)</span></div>
+          <p style="font-size:0.86rem; color:var(--text-muted); margin-top:0.6rem;">
+            Rather than a black-box model, our supervised TF-IDF + Logistic Regression pipeline provides transparent token attribution weights showing which words drove the sentiment classification.
           </p>
         </div>
         <div class="card">
-          <div class="card-title"><span>🗺️ Spatio-Temporal Tracking</span></div>
-          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.75rem;">
-            Location taxonomy mapping regional Indian jurisdictions (Mumbai, Maharashtra, Delhi, Bengaluru) aligned with OWID global indicators and district case registries.
+          <div class="card-title"><span>🗺️ Spatio-Temporal Grounding</span></div>
+          <p style="font-size:0.86rem; color:var(--text-muted); margin-top:0.6rem;">
+            Combines regional text parsing (Mumbai, Maharashtra, Delhi, Bengaluru) with official Covid19India archives and OWID datasets across lead/lag correlation offsets.
           </p>
         </div>
       </div>
@@ -177,91 +175,105 @@
     <section class="view-panel" id="view-dashboard">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.6rem; font-weight:800;">Main Surveillance Command Center</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Continuous multi-signal correlation across social text, clinical symptoms, and confirmed epidemic curves.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Epidemiological Surveillance Dashboard</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Multi-signal tracking: social conversation volume, clinical terms, and confirmed case curves.</p>
         </div>
-        <button class="btn-primary" onclick="refreshDashboardData()"><span>Sync Live Feeds</span></button>
+        <button class="btn-primary" onclick="loadDashboardMetrics(); loadDailySurveillanceChart();"><span>Sync Live Feeds</span></button>
       </div>
 
-      <!-- KPI Ribbon -->
-      <div class="kpi-grid" id="dashKpis">
+      <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Selected Tweets</span><span>💬</span></div>
+          <div class="kpi-header"><span class="kpi-title">Active Filter Tweets</span><span>💬</span></div>
           <div class="kpi-value" id="dash-tweets">-</div>
           <div class="kpi-footer" id="dash-region-label">Region: Global</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Sentiment Ratio</span><span>⚖️</span></div>
-          <div class="kpi-value" id="dash-sent-ratio" style="font-size:1.4rem;">-</div>
-          <div class="kpi-footer">Pos / Neu / Neg (%)</div>
+          <div class="kpi-header"><span class="kpi-title">Sentiment Distribution</span><span>⚖️</span></div>
+          <div class="kpi-value" id="dash-sent-ratio" style="font-size:1.35rem;">-</div>
+          <div class="kpi-footer">Positive / Neutral / Negative (%)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-header"><span class="kpi-title">Leading Clinical Term</span><span>🏥</span></div>
-          <div class="kpi-value" id="dash-top-symptom" style="font-size:1.4rem; color:var(--cyan-bright);">-</div>
+          <div class="kpi-value" id="dash-top-symptom" style="font-size:1.35rem; color:var(--primary);">-</div>
           <div class="kpi-footer" id="dash-symptom-rate">-</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-header"><span class="kpi-title">Peak Lead/Lag Offset</span><span>⏱️</span></div>
+          <div class="kpi-header"><span class="kpi-title">Optimal Lead/Lag</span><span>⏱️</span></div>
           <div class="kpi-value" id="dash-optimal-lag">+1 Day</div>
           <div class="kpi-footer">r = -0.318 (India Cases)</div>
         </div>
       </div>
 
-      <!-- Epidemic Curve & Volume Chart -->
+      <!-- Dual-Axis Surveillance Chart -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><span>📈 Epidemic Curve: Daily Social Chatter vs Confirmed Infections</span></div>
-          <span class="card-caption">Dual-axis tracking (Blue: Social Posts, Red: Official Daily Cases)</span>
+          <div class="card-title"><span>📈 Daily Social Volume vs Confirmed Infections</span></div>
+          <span class="card-caption">Dual-axis: Blue bars (Twitter Volume) · Red line (Official Cases)</span>
         </div>
-        <div class="chart-box" id="dailyTrendChartBox">
+        <div class="chart-box">
           <canvas id="dailyTrendChart"></canvas>
         </div>
       </div>
 
-      <!-- 2-Column Split: Clinical Symptoms & Sentiment Composition -->
+      <!-- Symptoms & Sentiment -->
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
             <div class="card-title"><span>🩺 Clinical Symptom Mention Frequency</span></div>
-            <span class="card-caption">% of total posts mentioning clinical keywords</span>
+            <span class="card-caption">% of tweets containing clinical terms</span>
           </div>
-          <div class="chart-box" style="height:320px;">
+          <div class="chart-box" style="height:300px;">
             <canvas id="symptomsChart"></canvas>
           </div>
         </div>
         <div class="card">
           <div class="card-header">
             <div class="card-title"><span>😊 Sentiment Polarity Distribution</span></div>
-            <span class="card-caption">Supervised TF-IDF Model vs Rule-based VADER</span>
+            <span class="card-caption">3-Class supervised classification</span>
           </div>
-          <div class="chart-box" style="height:320px;">
+          <div class="chart-box" style="height:300px;">
             <canvas id="sentimentDoughnutChart"></canvas>
           </div>
+        </div>
+      </div>
+
+      <!-- Symptom Co-occurrence Matrix Section -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span>🔗 Clinical Symptom Co-occurrence Matrix</span></div>
+          <span class="card-caption">Pairwise occurrence frequencies across 178,484 posts</span>
+        </div>
+        <div class="table-responsive">
+          <table class="flux-table" id="cooccurrenceTable">
+            <!-- Dynamically populated 9x9 matrix -->
+          </table>
         </div>
       </div>
     </section>
 
     <!-- ----------------- VIEW 3: EXPLORER & INGESTION ----------------- -->
     <section class="view-panel" id="view-explore">
-      <div class="card-header" style="margin-bottom:1.5rem;">
+      <div class="card-header" style="margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.5rem; font-weight:800;">Dataset Explorer & Ingestion Pipeline</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Explore, filter, and inspect cleaned social media and clinical surveillance records.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Dataset Ingestion & Exploration</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Inspect cleaned records, map custom data columns, or upload your own dataset.</p>
         </div>
         <button class="btn-primary" onclick="downloadSampleCSV()"><span>Export Filtered CSV</span></button>
       </div>
 
-      <div class="card" style="margin-bottom:1.5rem;">
-        <div class="card-title" style="margin-bottom:0.75rem;"><span>📥 Schema Column Mapper</span></div>
-        <div style="display:flex; gap:1rem; flex-wrap:wrap; font-size:0.82rem;">
-          <div class="filter-group"><span class="filter-label">Text Column:</span> <span class="badge-neutral">text</span></div>
-          <div class="filter-group"><span class="filter-label">Date:</span> <span class="badge-neutral">date (ISO8601)</span></div>
-          <div class="filter-group"><span class="filter-label">Location:</span> <span class="badge-neutral">user_location</span></div>
-          <div class="filter-group"><span class="filter-label">Sentiment:</span> <span class="badge-neutral">model_sentiment</span></div>
-          <div class="filter-group"><span class="filter-label">Topic:</span> <span class="badge-neutral">topic_label</span></div>
+      <!-- Real Interactive CSV File Upload Zone -->
+      <div class="card" style="margin-bottom:1.4rem;">
+        <div class="card-title" style="margin-bottom:0.75rem;"><span>📂 Ingest Custom Dataset (CSV / JSON)</span></div>
+        <div class="upload-dropzone" onclick="document.getElementById('csvFileInput').click()">
+          <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="handleFileUpload(event)">
+          <div style="font-size:1.6rem; margin-bottom:0.4rem;">📄</div>
+          <div style="font-weight:600; font-size:0.92rem; color:var(--text-main);">Click to browse or drop CSV file here</div>
+          <div style="font-size:0.78rem; color:var(--text-dim); margin-top:0.25rem;">Supports client-side parsing with column auto-mapping (Text, Date, Location, Sentiment)</div>
         </div>
+        <div id="uploadStatusBadge" style="display:none; font-size:0.82rem; font-weight:600; color:var(--emerald-success); text-align:center;"></div>
       </div>
 
+      <!-- Live Tweet Records Table -->
       <div class="card">
         <div class="table-responsive">
           <table class="flux-table" id="exploreTable">
@@ -269,11 +281,11 @@
               <tr>
                 <th>Date</th>
                 <th>Region</th>
-                <th>Location</th>
+                <th>User Location</th>
                 <th>Sentiment</th>
                 <th>VADER Compound</th>
                 <th>Topic Category</th>
-                <th>Tweet Text</th>
+                <th>Post Text</th>
               </tr>
             </thead>
             <tbody id="exploreTableBody">
@@ -286,39 +298,39 @@
 
     <!-- ----------------- VIEW 4: NLP LAB & XAI ----------------- -->
     <section class="view-panel" id="view-nlp-lab">
-      <div style="margin-bottom:1.5rem;">
-        <h2 style="font-size:1.5rem; font-weight:800;">NLP Laboratory & Explainable AI (XAI) Attribution</h2>
-        <p style="color:var(--text-dim); font-size:0.85rem;">Test custom text, observe dual-model predictions, and inspect token-level feature weights.</p>
+      <div style="margin-bottom:1.25rem;">
+        <h2 style="font-size:1.45rem; font-weight:800;">Natural Language Processing & Explainable AI Lab</h2>
+        <p style="color:var(--text-dim); font-size:0.83rem;">Evaluate real-time sentiment predictions and inspect transparent token feature attribution weights.</p>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-title" style="margin-bottom:0.75rem;"><span>💬 Input Text Playground</span></div>
+          <div class="card-title" style="margin-bottom:0.6rem;"><span>💬 Interactive Text Playground</span></div>
           
-          <div style="margin-bottom:0.75rem;">
-            <span class="quick-pill" onclick="setNlpSample('Hospitals in Mumbai are facing severe shortage of oxygen cylinders')">Oxygen Crisis</span>
+          <div style="margin-bottom:0.65rem;">
+            <span class="quick-pill" onclick="setNlpSample('Hospitals in Mumbai are facing severe shortage of oxygen cylinders')">Oxygen Shortage</span>
             <span class="quick-pill" onclick="setNlpSample('Great news! Phase 3 vaccine trial shows 95% efficacy against coronavirus')">Vaccine Efficacy</span>
-            <span class="quick-pill" onclick="setNlpSample('New COVID-19 safety guidelines and travel advisory released today')">Travel Advisory</span>
+            <span class="quick-pill" onclick="setNlpSample('New COVID-19 safety guidelines and travel advisory released today')">Public Advisory</span>
             <span class="quick-pill" onclick="setNlpSample('Suffering from mild fever and sore throat after taking the booster shot')">Mild Symptoms</span>
           </div>
 
           <textarea class="nlp-input-box" id="nlpInputText">Hospitals in Mumbai are facing severe shortage of oxygen cylinders, doctors are exhausted</textarea>
           
-          <button class="btn-primary" onclick="runNlpInference()" style="width:100%;"><span>Run Live Prediction & XAI Attribution</span></button>
+          <button class="btn-primary" onclick="runNlpInference()" style="width:100%;"><span>Run Sentiment Classification & XAI Attribution</span></button>
 
-          <div style="margin-top:1.5rem; padding:1.2rem; background:rgba(15,23,42,0.6); border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+          <div style="margin-top:1.25rem; padding:1.1rem; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
-                <span style="font-size:0.78rem; color:var(--text-dim); text-transform:uppercase;">ML Model Prediction:</span>
-                <div style="font-size:1.4rem; font-weight:800;" id="nlpPredLabel">Negative</div>
+                <span style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase;">Supervised ML Model:</span>
+                <div style="font-size:1.35rem; font-weight:800;" id="nlpPredLabel">Negative</div>
               </div>
               <div style="text-align:right;">
-                <span style="font-size:0.78rem; color:var(--text-dim); text-transform:uppercase;">Confidence:</span>
-                <div style="font-size:1.4rem; font-weight:800; color:var(--cyan-bright);" id="nlpPredConf">81.4%</div>
+                <span style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase;">Confidence Score:</span>
+                <div style="font-size:1.35rem; font-weight:800; color:var(--primary);" id="nlpPredConf">81.4%</div>
               </div>
             </div>
-            <div style="margin-top:0.75rem; font-size:0.82rem; color:var(--text-muted);" id="nlpVaderVerdict">
-              VADER Compound: -0.557 (Negative) · Consensus: Agreed
+            <div style="margin-top:0.6rem; font-size:0.8rem; color:var(--text-muted);" id="nlpVaderVerdict">
+              VADER Compound: -0.557 (Negative) · Consensus: Both models agree
             </div>
           </div>
         </div>
@@ -327,9 +339,9 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title"><span>🔍 Explainable AI: Token Feature Weights</span></div>
-            <span class="card-caption">Linguistic tokens driving this classification</span>
+            <span class="card-caption">Linguistic contribution to class decision</span>
           </div>
-          <p style="font-size:0.8rem; color:var(--text-dim);">Green bars indicate words pushing toward this sentiment; red bars oppose it.</p>
+          <p style="font-size:0.78rem; color:var(--text-dim);">Green bars indicate words that pushed toward this sentiment; red bars opposed it.</p>
           
           <div class="xai-bar-container" id="xaiBarsContainer">
             <!-- Dynamically populated -->
@@ -337,26 +349,26 @@
         </div>
       </div>
 
-      <!-- Model Performance & Confusion Matrix -->
-      <div class="card" style="margin-top:1.5rem;">
+      <!-- Evaluation Metrics Card -->
+      <div class="card" style="margin-top:1.25rem;">
         <div class="card-header">
-          <div class="card-title"><span>🎯 Benchmark Test Split Metrics (44,955 Labeled Tweets)</span></div>
+          <div class="card-title"><span>🎯 Official Benchmark Validation Split (44,955 Labeled Tweets)</span></div>
         </div>
         <div class="grid-3">
-          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
-            <div style="font-size:0.78rem; color:var(--text-dim);">ACCURACY</div>
-            <div style="font-size:1.8rem; font-weight:800; color:#fff;">78.20%</div>
-            <div style="font-size:0.75rem; color:var(--emerald-success);">Official Benchmark Split</div>
+          <div style="padding:1rem; background:var(--bg-surface-elevated); border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-size:0.74rem; color:var(--text-dim);">TEST ACCURACY</div>
+            <div style="font-size:1.7rem; font-weight:800; color:var(--text-main);">78.20%</div>
+            <div style="font-size:0.75rem; color:var(--emerald-success);">Supervised TF-IDF + Logistic Regression</div>
           </div>
-          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
-            <div style="font-size:0.78rem; color:var(--text-dim);">MACRO F1-SCORE</div>
-            <div style="font-size:1.8rem; font-weight:800; color:#fff;">0.7586</div>
-            <div style="font-size:0.75rem; color:var(--cyan-bright);">Balanced multi-class</div>
+          <div style="padding:1rem; background:var(--bg-surface-elevated); border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-size:0.74rem; color:var(--text-dim);">MACRO F1-SCORE</div>
+            <div style="font-size:1.7rem; font-weight:800; color:var(--text-main);">0.7586</div>
+            <div style="font-size:0.75rem; color:var(--primary);">Balanced across Neg / Neu / Pos</div>
           </div>
-          <div style="padding:1rem; background:rgba(255,255,255,0.02); border-radius:8px;">
-            <div style="font-size:0.78rem; color:var(--text-dim);">VADER LEXICON ACCURACY</div>
-            <div style="font-size:1.8rem; font-weight:800; color:#fff;">93.50%</div>
-            <div style="font-size:0.75rem; color:var(--indigo-accent);">Agreement with human labels</div>
+          <div style="padding:1rem; background:var(--bg-surface-elevated); border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-size:0.74rem; color:var(--text-dim);">VADER BASELINE AGREEMENT</div>
+            <div style="font-size:1.7rem; font-weight:800; color:var(--text-main);">93.50%</div>
+            <div style="font-size:0.75rem; color:var(--teal-accent);">Agreement with human ground truth</div>
           </div>
         </div>
       </div>
@@ -364,12 +376,12 @@
 
     <!-- ----------------- VIEW 5: TRENDS & FORECASTING ----------------- -->
     <section class="view-panel" id="view-trends">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.5rem; font-weight:800;">Time-Series Trend Detection & Forecasting</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Autoregressive trend estimation with 95% confidence intervals and holdout validation.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Time-Series Trend Detection & Forecasting</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Autoregressive trendline projections with 95% confidence intervals and validation metrics.</p>
         </div>
-        <div style="display:flex; gap:0.5rem;">
+        <div style="display:flex; gap:0.4rem;">
           <button class="btn-ghost" onclick="setForecastHorizon(7)">7 Days</button>
           <button class="btn-ghost" onclick="setForecastHorizon(14)">14 Days</button>
           <button class="btn-ghost" onclick="setForecastHorizon(30)">30 Days</button>
@@ -378,13 +390,13 @@
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><span>🔮 Observed Volume & Projected Forecast Curve</span></div>
+          <div class="card-title"><span>🔮 Observed Discussion Volume vs Projected Forecast</span></div>
           <span class="card-caption" id="forecastMetricsBadge">MAE: 142.1 · RMSE: 184.6</span>
         </div>
-        <div class="chart-box" style="height:420px;">
+        <div class="chart-box" style="height:400px;">
           <canvas id="forecastChart"></canvas>
         </div>
-        <div style="margin-top:1rem; font-size:0.78rem; color:var(--text-dim);">
+        <div style="margin-top:0.85rem; font-size:0.78rem; color:var(--text-dim);">
           ⚠️ <em>Scientific Notice:</em> Forecasted trajectories represent projected social media conversation volume and public anxiety indices, not clinical lab-confirmed infection rates.
         </div>
       </div>
@@ -392,28 +404,28 @@
 
     <!-- ----------------- VIEW 6: GEOSPATIAL INTELLIGENCE ----------------- -->
     <section class="view-panel" id="view-map">
-      <div style="margin-bottom:1.5rem;">
-        <h2 style="font-size:1.5rem; font-weight:800;">Geospatial Epidemiological Radar</h2>
-        <p style="color:var(--text-dim); font-size:0.85rem;">Interactive geographic nodes displaying discussion density, leading symptom signals, and local case statistics.</p>
+      <div style="margin-bottom:1.25rem;">
+        <h2 style="font-size:1.45rem; font-weight:800;">Geospatial Epidemiological Radar</h2>
+        <p style="color:var(--text-dim); font-size:0.83rem;">Regional surveillance nodes showing discussion density, top symptom signals, and local case figures.</p>
       </div>
 
-      <div class="card" style="padding:1rem;">
+      <div class="card" style="padding:0.85rem;">
         <div id="mapContainer"></div>
       </div>
 
-      <div class="grid-3" id="geoHubsGrid" style="margin-top:1.5rem;">
-        <!-- Dynamically populated hub cards -->
+      <div class="grid-3" id="geoHubsGrid" style="margin-top:1.25rem;">
+        <!-- Populated via API -->
       </div>
     </section>
 
     <!-- ----------------- VIEW 7: OUTBREAK SIGNALS MONITOR ----------------- -->
     <section class="view-panel" id="view-signals">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.5rem; font-weight:800;">Outbreak Signal Monitor & Anomaly Radar</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Automated Z-score surveillance flagging statistically unusual chatter surges.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Outbreak Signal Monitor & Anomaly Detection</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Automated Z-score surveillance flagging statistically unusual chatter surges.</p>
         </div>
-        <div style="display:flex; align-items:center; gap:0.8rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
           <span class="filter-label">Sensitivity Threshold:</span>
           <select class="filter-select" id="signalThresholdSelect" onchange="loadAnomalySignals()">
             <option value="1.5">1.5σ (Broad Watch)</option>
@@ -449,25 +461,25 @@
 
     <!-- ----------------- VIEW 8: RESEARCH WORKSPACE ----------------- -->
     <section class="view-panel" id="view-research">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.5rem; font-weight:800;">Research Projects & Clinical Comparison</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Create persistent research workspaces, record epidemiological notes, and compare diseases.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Research Projects & Clinical Workspace</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Manage persistent research projects, record epidemiological caveats, and annotate findings.</p>
         </div>
         <button class="btn-primary" onclick="createNewProject()"><span>+ New Research Project</span></button>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-title" style="margin-bottom:1rem;"><span>📁 Active Research Projects</span></div>
-          <div id="projectListContainer" style="display:flex; flex-direction:column; gap:0.75rem;">
+          <div class="card-title" style="margin-bottom:0.85rem;"><span>📁 Active Research Projects</span></div>
+          <div id="projectListContainer" style="display:flex; flex-direction:column; gap:0.65rem;">
             <!-- Populated via localStorage -->
           </div>
         </div>
 
         <div class="card">
-          <div class="card-title" style="margin-bottom:1rem;"><span>📝 Analyst Field Notes & Observations</span></div>
-          <textarea class="nlp-input-box" id="analystNotesText" style="height:180px;" placeholder="Record hypotheses, observed clinical shifts, data caveats..."></textarea>
+          <div class="card-title" style="margin-bottom:0.85rem;"><span>📝 Analyst Field Notes & Observations</span></div>
+          <textarea class="nlp-input-box" id="analystNotesText" style="height:170px;" placeholder="Record hypotheses, clinical observations, regional testing constraints..."></textarea>
           <button class="btn-primary" onclick="saveAnalystNotes()"><span>Save Notes to Workspace</span></button>
         </div>
       </div>
@@ -475,19 +487,19 @@
 
     <!-- ----------------- VIEW 9: AUTOMATED REPORTS ----------------- -->
     <section class="view-panel" id="view-reports">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <div>
-          <h2 style="font-size:1.5rem; font-weight:800;">Automated Research Intelligence Briefing</h2>
-          <p style="color:var(--text-dim); font-size:0.85rem;">Compile publication-ready executive briefings with quantitative indicators and provenance statements.</p>
+          <h2 style="font-size:1.45rem; font-weight:800;">Automated Research Intelligence Briefings</h2>
+          <p style="color:var(--text-dim); font-size:0.83rem;">Generate structured executive briefings with quantitative indicators and provenance statements.</p>
         </div>
-        <button class="btn-primary" onclick="compileExecutiveReport()"><span>Compile New Report</span></button>
+        <button class="btn-primary" onclick="compileExecutiveReport()"><span>Compile New Briefing</span></button>
       </div>
 
       <div class="card">
-        <div id="reportPreviewContainer" style="font-family:inherit; line-height:1.7;">
-          <p style="color:var(--text-dim);">Click 'Compile New Report' to generate a structured briefing from active surveillance data.</p>
+        <div id="reportPreviewContainer" style="font-family:inherit; line-height:1.65;">
+          <p style="color:var(--text-dim);">Click 'Compile New Briefing' to generate a structured briefing from active surveillance data.</p>
         </div>
-        <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+        <div style="margin-top:1.25rem; display:flex; gap:0.85rem;">
           <button class="btn-primary" id="btnDownloadReport" style="display:none;" onclick="downloadCompiledReport()"><span>Download Markdown Report (.md)</span></button>
         </div>
       </div>
@@ -495,7 +507,7 @@
 
   </main>
 
-  <!-- Toast Notification System -->
+  <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Leaflet JS -->

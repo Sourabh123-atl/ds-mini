@@ -65,23 +65,89 @@ Access the application at `http://localhost:8501`.
 
 ---
 
-## 🔌 Production REST API (`api.py`)
+## 🌐 FLUX Web Command Center & REST API (`api.py`)
 
-In addition to the Streamlit UI, this repository includes a production-ready **FastAPI** backend:
+In addition to the Streamlit UI, this platform features **FLUX — Infectious Disease Intelligence Command Center**, a modern single-page web application (SPA) backed by **FastAPI** (`http://localhost:8000`):
 
 ```bash
-# Launch the API server
+# Launch the FLUX Web Application & REST API
 python api.py
 # or: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 ```
-Interactive Swagger documentation is available at: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### API Endpoints
-- `POST /api/v1/predict` — Single tweet inference with confidence scores and **Explainable AI (XAI) token attribution**.
-- `POST /api/v1/batch-predict` — High-speed vectorized batch prediction (up to 500 tweets).
-- `GET /api/v1/surveillance/anomalies` — Automated statistical outbreak anomaly detection flags.
-- `GET /api/v1/surveillance/summary` — Precomputed corpus statistics, topic weights, and hashtags.
-- `GET /api/v1/surveillance/correlations` — Lead/lag Pearson correlation coefficients.
+- **Web Command Center UI**: [http://localhost:8000/](http://localhost:8000/)
+- **Interactive Swagger REST Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Streamlit Analytics Dashboard**: [http://localhost:8501/](http://localhost:8501/)
+
+### Web Command Center Features:
+1. **Academic / Healthcare Theme**: Grounded, clinical interface with dynamic Light / Dark Mode toggling and persistent user preferences.
+2. **Interactive Data Ingestion**: Client-side CSV uploader allowing researchers to ingest and analyze custom social or clinical records on the fly.
+3. **Clinical Symptom Co-occurrence Matrix**: Real-time pairwise symptom correlation tracking (Fever, Cough, Dyspnea, Fatigue, Loss of Smell).
+4. **Interactive Leaflet GIS Map**: Geospatial outbreak and chatter distribution rendered across Indian states and global epicenters with interactive heat circles.
+5. **Explainable AI (XAI) Attribution**: Word-level feature importance attribution visualizing exact vocabulary tokens driving sentiment and risk classifications.
+6. **Outbreak Anomaly Engine**: Longitudinal $Z$-score anomaly flags detecting public panic and clinical discussion surges ($1.5\sigma - 3.0\sigma$).
+7. **Research Workspace**: Client-persisted researcher notes, bookmarked case insights, and one-click Executive Briefing generator with Markdown export.
+
+### REST API Endpoints:
+- `GET /api/v1/overview` — High-level epidemiological corpus metrics, disease breakdown, and sentiment distributions.
+- `GET /api/v1/surveillance/daily` — Daily time series combining tweet volumes, sentiment polarity, and official confirmed cases.
+- `GET /api/v1/surveillance/anomalies` — Automated rolling $Z$-score outbreak anomaly detection flags.
+- `GET /api/v1/surveillance/forecast` — 7-day trend projections with confidence intervals.
+- `GET /api/v1/surveillance/geo` — GeoJSON-ready regional outbreak distribution data.
+- `GET /api/v1/surveillance/cooccurrence` — Pairwise clinical symptom co-occurrence matrix.
+- `GET /api/v1/surveillance/topics` — Precomputed 8-topic NMF semantic cluster distributions.
+- `POST /api/v1/predict` — Single tweet inference with Explainable AI (XAI) token weights.
+- `POST /api/v1/batch-predict` — High-speed vectorized batch prediction (up to 500 records).
+- `GET /api/v1/models/evaluation` — Full model evaluation metrics, confusion matrix, and classification report.
+- `POST /api/v1/reports/generate` — Automated epidemiological intelligence briefing generator.
+
+---
+
+## 🔬 How FLUX Works End-to-End (System Architecture)
+
+```
+[Raw Sources: Kaggle, OWID, covid19india.org]
+                  │
+                  ▼
+┌─────────────────────────────────────────────────────────┐
+│ 1. Data Cleaning & Spatial Normalization (analyze.py)   │
+│    • Regex cleansing (URLs, handles, emojis, punct)     │
+│    • Indian State & District Geotagging via Lexicon     │
+│    • Clinical Symptom Flagging (12 WHO keywords)        │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ 2. NLP & Sentiment Pipeline (train_model.py)            │
+│    • TF-IDF Vectorizer (1-2 n-grams, 50,000 features)   │
+│    • Regularized Logistic Regression (C=4.0, balanced)  │
+│    • VADER Rule-based Lexicon Sentiment (Compound)      │
+│    • NMF Topic Modeling (8 Unsupervised Themes)         │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ 3. Epidemiological Analytics & Anomaly Engine           │
+│    • Pearson Lead/Lag Cross-Correlation (τ ∈ [-7, +7])  │
+│    • Rolling Z-Score Anomaly Detector (1.5σ - 3.0σ)     │
+│    • Dual-Axis Time Series Alignment with Case Curves   │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ 4. FastAPI High-Throughput REST Service (api.py)        │
+│    • Static Single-Page App Hosting at /                │
+│    • OpenAPI / Swagger Documentation at /docs           │
+│    • Explainable AI Token Attribution Engine            │
+└───────────────────┬───────────────────┬─────────────────┘
+                    │                   │
+                    ▼                   ▼
+┌───────────────────────────────┐ ┌──────────────────────┐
+│ FLUX Command Center Web App   │ │ Streamlit Analytics  │
+│ (Vanilla JS + Chart.js + GIS) │ │ Dashboard (port 8501)│
+│ Port 8000                     │ │                      │
+└───────────────────────────────┘ └──────────────────────┘
+```
 
 
 ## 📊 Model Evaluation & Benchmarks
