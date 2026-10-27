@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.git
+.gitignore
+report/
+scripts-report/
+artifacts/screenshots/
+data/raw/
+.DS_Store
